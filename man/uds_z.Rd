@@ -4,7 +4,7 @@
 \alias{uds_z}
 \title{Calculate the z-scores and impairment indicators of UDS3 cognitive tests using EAS or NACC norms}
 \usage{
-uds_z(dat, tests, coef_dat, norms = "eas", impair_sd = 1, verbose = T)
+uds_z(dat, tests, norms = "eas", impair_sd = 1, verbose = T)
 }
 \arguments{
 \item{dat}{a dataframe or tibble, contains columns of demographic covariates and UDS3 cognitive tests}

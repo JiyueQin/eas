@@ -28,17 +28,17 @@ check_values = function(vec, range1=NULL, range2=NULL, binary = F){
 ###############################################################################################
 
 
-uds_z_single = function(dat, test, coef_dat, norms = 'eas', impair_sd = 1, verbose = T){
+uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
   if(!norms %in% c('eas', 'nacc')){
     stop("Please correct specify which norms to use, can be 'eas' or 'nacc'")
   }
 
-  # use eas norms
+  # use eas or nacc norms
   if(norms=='eas'){
-    coef = coef_dat %>% filter(cognitive_test == test)
+    coef = norms_coef_eas %>% filter(cognitive_test == test)
   }
   if(norms=='nacc'){
-    coef = coef_dat %>% filter(cognitive_test == test)
+    coef = norms_coef_nacc %>% filter(cognitive_test == test)
   }
   if(!nrow(coef)){stop(paste('the cognitive test', test, 'cannot be found in our norms. Please check!'))}
   # check if required covariates are in dat
@@ -134,11 +134,11 @@ uds_z_single = function(dat, test, coef_dat, norms = 'eas', impair_sd = 1, verbo
 
 
 
-uds_z = function(dat, tests, coef_dat, norms = 'eas', impair_sd = 1, verbose = T){
+uds_z = function(dat, tests, norms = 'eas', impair_sd = 1, verbose = T){
   if(!norms %in% c('eas', 'nacc')){
     stop("Please correct specify which norms to use, can be 'eas' or 'nacc'")
   }
   old_vars = colnames(dat)
-  map(tests, ~uds_z_single(dat, .x, coef_dat, norms, impair_sd, verbose)) %>% reduce(full_join, by = old_vars)
+  map(tests, ~uds_z_single(dat, .x, norms, impair_sd, verbose)) %>% reduce(full_join, by = old_vars)
 
 }
