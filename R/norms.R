@@ -23,12 +23,11 @@ check_values = function(vec, range1=NULL, range2=NULL, binary = F){
 #                     default is 1.
 #     for tr_a1 and tr_b1, it would be 1sd above the mean as a higher score in these two tests indicates a worse
 #     performance. for all the other tests, it would be 1sd below the mean.
-#         -verbose: logical, verbose =T adds z-scores and indicators of impairment,
-#                   versbose =F additionally adds mean and sd
+#         -out_mean_sd: logical, out_mean_sd = T additionally adds mean and sd, default is F
 ###############################################################################################
 
 
-uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
+uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, out_mean_sd = F){
   if(!norms %in% c('eas', 'nacc')){
     stop("Please correct specify which norms to use, can be 'eas' or 'nacc'")
   }
@@ -82,7 +81,7 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
   {if (check_values(test_var, 0, 40)) stop(paste(test, 'should be in the range of 0 and 40. Please check!'))}
   if(test == 'flword')
   {if (check_values(test_var, 0, 80)) stop('flword should be in the range of 0 and 80. Please check!')}
-  if(test %in% c('animals60sec', 'lwords60sec'))
+  if(test %in% c('animals60sec', 'vegetables60sec'))
   {if (check_values(test_var, 0, 77)) stop(paste(test, 'should be in the range of 0 and 77. Please check!'))}
   if(test == 'tr_a1')
   {if (check_values(test_var, 0, 150)) stop('tr_a1 should be in the range of 0 and 150. Please check!')}
@@ -104,7 +103,7 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
     rename_at(vars(z), ~paste0(., '_', test)) %>%
     select(-colnames(select(coef, -estimate_sigma)))
 
-  if(verbose){
+  if(!out_mean_sd){
     dat_out %>% select(-mean, -estimate_sigma)
   }else{
     dat_out %>%
@@ -114,7 +113,6 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
 
 
 }
-
 
 #' Calculate the z-scores and impairment indicators of UDS3 cognitive tests
 #'
@@ -162,7 +160,7 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
 #' @param tests character or a character vector, the name of the cognitive test(s)
 #' @param norms specify if you want to use EAS norms(norms='eas') or NACC norms(norms='nacc'), default is 'eas'
 #' @param impair_sd a positive number, how many SD worse than the mean should be defined as impairment, default is 1.
-#' @param verbose logical, versbose=F additionally adds mean and sd estimates for each cognitive test in the output dataframe, default is F
+#' @param out_mean_sd logical, out_mean_sd=T additionally adds mean and sd estimates for each cognitive test in the output dataframe, default is F
 #' @return a tibble(dataframe) with the demographically adjusted z-score and impairment indicator
 #'        for each of the specified cognitive tests.
 #' @examples
@@ -173,7 +171,7 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
 #' uds_z(sample_dat, c('tr_a1','tr_b1'), norms = 'nacc', impair_sd = 1.5)
 #' # calculate the z-score and the impaiment indicator for minttotal with EAS norms and 1SD to define impairment
 #' # Also output mean and sd estimates in addition to the z-scores and the impairment indicators.
-#' uds_z(sample_dat, 'minttotal', norms = 'eas', impair_sd = 1, verbose = F)
+#' uds_z(sample_dat, 'minttotal', norms = 'eas', impair_sd = 1, out_mean_sd = T)
 #' @seealso \url{https://github.com/JiyueQin/eas}
 #' @author Jiyue Qin
 #' @import dplyr
@@ -186,11 +184,11 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, verbose = T){
 
 
 
-uds_z = function(dat, tests, norms = 'eas', impair_sd = 1, verbose = T){
+uds_z = function(dat, tests, norms = 'eas', impair_sd = 1, out_mean_sd = F){
   if(!norms %in% c('eas', 'nacc')){
     stop("Please correct specify which norms to use, can be 'eas' or 'nacc'")
   }
   old_vars = colnames(dat)
-  map(tests, ~uds_z_single(dat, .x, norms, impair_sd, verbose)) %>% reduce(full_join, by = old_vars)
+  map(tests, ~uds_z_single(dat, .x, norms, impair_sd, out_mean_sd)) %>% reduce(full_join, by = old_vars)
 
 }

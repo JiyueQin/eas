@@ -85,7 +85,7 @@ devtools::install_github("JiyueQin/eas")
 ``` r
 library(eas)
 library(tidyverse)
-# here is a sample datset used to calculate z-scores. You should prepare your dataset in this standard format.
+# here is a sample hypothetical dataset used to calculate z-scores. You should prepare your dataset in this standard format.
 head(sample_dat)
 ```
 
@@ -168,7 +168,7 @@ uds_z(sample_dat_small, c('tr_a1','tr_b1'), norms = 'nacc', impair_sd = 1.5)
 ``` r
 # calculate the z-score and the impaiment indicator for minttotal with EAS norms and 1SD to define impairment
 # Also output mean and sd estimates in addition to the z-scores and the impairment indicators.
-uds_z(sample_dat_small, 'minttotal', norms = 'eas', impair_sd = 1, verbose = F)
+uds_z(sample_dat_small, 'minttotal', norms = 'eas', impair_sd = 1, out_mean_sd  = T)
 ```
 
     ## # A tibble: 20 x 11

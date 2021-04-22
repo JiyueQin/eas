@@ -4,7 +4,7 @@
 \alias{uds_z}
 \title{Calculate the z-scores and impairment indicators of UDS3 cognitive tests}
 \usage{
-uds_z(dat, tests, norms = "eas", impair_sd = 1, verbose = T)
+uds_z(dat, tests, norms = "eas", impair_sd = 1, out_mean_sd = F)
 }
 \arguments{
 \item{dat}{a dataframe or tibble which contains columns of demographic covariates and UDS3 cognitive tests in numeric format.
@@ -23,7 +23,7 @@ uds_z(dat, tests, norms = "eas", impair_sd = 1, verbose = T)
 
 \item{impair_sd}{a positive number, how many SD worse than the mean should be defined as impairment, default is 1.}
 
-\item{verbose}{logical, versbose=F additionally adds mean and sd estimates for each cognitive test in the output dataframe, default is F}
+\item{out_mean_sd}{logical, out_mean_sd=T additionally adds mean and sd estimates for each cognitive test in the output dataframe, default is F}
 }
 \value{
 a tibble(dataframe) with the demographically adjusted z-score and impairment indicator
@@ -66,11 +66,11 @@ You can specify how many SD worse than the population mean should be defined as 
 \examples{
 # here is a sample datset used to calculate z-scores. You should prepare your dataset in this standard format.
 head(sample_dat)
-# calculate the z-score and the impaiment indicator for minttotal with EAS norms and 1SD to define impairment
-uds_z(sample_dat, 'minttotal', norms = 'eas', impair_sd = 1)
 # calculate z-scores and the impairment indicators for tr_a1 and tr_b1 with NACC norms and 1.5 SD to define impairment.
+uds_z(sample_dat, c('tr_a1','tr_b1'), norms = 'nacc', impair_sd = 1.5)
+# calculate the z-score and the impaiment indicator for minttotal with EAS norms and 1SD to define impairment
 # Also output mean and sd estimates in addition to the z-scores and the impairment indicators.
-uds_z(sample_dat, c('tr_a1','tr_b1'), norms = 'nacc', impair_sd = 1.5, verbose = F)
+uds_z(sample_dat, 'minttotal', norms = 'eas', impair_sd = 1, out_mean_sd = T)
 }
 \seealso{
 \url{https://github.com/JiyueQin/eas}
