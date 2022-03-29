@@ -99,7 +99,7 @@ uds_z_single = function(dat, test, norms = 'eas', impair_sd = 1, out_mean_sd = F
   }
 
   dat_out = dat_out %>%
-    mutate(!!paste0('impair_', impair_sd, 'sd_', test) := as.numeric((z<=-impair_sd))) %>%
+    mutate(!!paste0('impair_', impair_sd, 'sd_', test) := as.numeric((z<-impair_sd))) %>%
     rename_at(vars(z), ~paste0(., '_', test)) %>%
     select(-colnames(select(coef, -estimate_sigma)))
 
